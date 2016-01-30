@@ -19059,13 +19059,30 @@ var React = require('react');
 var ListItem = React.createClass({
   displayName: 'ListItem',
 
+  getInitialState: function () {
+    return {
+      complete: false
+    };
+  },
+  handleComplete: function () {
+    this.setState({ complete: !this.state.complete });
+  },
   render: function () {
+    var complete = this.state.complete;
+    var style = {
+      'text-decoration': 'none'
+    };
+    if (complete) {
+      style = {
+        'text-decoration': 'line-through'
+      };
+    }
     return React.createElement(
       'li',
       null,
       React.createElement(
         'h4',
-        null,
+        { onClick: this.handleComplete, style: style },
         this.props.text
       )
     );
