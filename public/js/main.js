@@ -19126,9 +19126,82 @@ module.exports = ListManager;
 
 },{"./List.jsx":159,"react":157}],162:[function(require,module,exports){
 var React = require('react');
+var ListManager = require('./ListManager.jsx');
+
+var NewList = React.createClass({
+  displayName: 'NewList',
+
+  render: function () {
+
+    var createList = function (title, index) {
+      return React.createElement(ListManager, { key: index + title, title: title });
+    };
+
+    return React.createElement(
+      'div',
+      null,
+      this.props.lists.map(createList)
+    );
+  }
+});
+
+module.exports = NewList;
+
+},{"./ListManager.jsx":161,"react":157}],163:[function(require,module,exports){
+var React = require('react');
+var NewList = require('./NewList.jsx');
+
+var NewListManager = React.createClass({
+  displayName: 'NewListManager',
+
+  getInitialState: function () {
+    return {
+      lists: [], newListTitle: ''
+    };
+  },
+  onChange: function (e) {
+    this.setState({ newListTitle: e.target.value });
+  },
+  handleSubmit: function (e) {
+    e.preventDefault();
+
+    var currentLists = this.state.lists;
+
+    currentLists.push(this.state.newListTitle);
+
+    this.setState({ lists: currentLists, newListTitle: '' });
+  },
+  render: function () {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h2',
+        null,
+        this.props.title
+      ),
+      React.createElement(
+        'form',
+        { onSubmit: this.handleSubmit },
+        React.createElement('input', { onChange: this.onChange, value: this.state.newListTitle }),
+        React.createElement(
+          'button',
+          null,
+          'New List'
+        )
+      ),
+      React.createElement(NewList, { lists: this.state.lists })
+    );
+  }
+});
+
+module.exports = NewListManager;
+
+},{"./NewList.jsx":162,"react":157}],164:[function(require,module,exports){
+var React = require('react');
 var ReactDOM = require('react-dom');
-var ListManager = require('./components/ListManager.jsx');
+var NewListManager = require('./components/NewListManager.jsx');
 
-ReactDOM.render(React.createElement(ListManager, { title: 'List' }), document.getElementById('list'));
+ReactDOM.render(React.createElement(NewListManager, { title: 'Lists' }), document.getElementById('lists'));
 
-},{"./components/ListManager.jsx":161,"react":157,"react-dom":1}]},{},[162]);
+},{"./components/NewListManager.jsx":163,"react":157,"react-dom":1}]},{},[164]);
